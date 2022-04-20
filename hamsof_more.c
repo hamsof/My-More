@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
          exit (1);
       }
       do_more(fp);
+      puts(":::::::::::::::::::::::::::::");
       fclose(fp); 
    }
    return 0;
@@ -80,33 +81,30 @@ void do_more(FILE *fp){
          else if(rv == 4)
          {
             char str[LINELEN];
-				char temp[20];
-            char buff[LINELEN]; //whole line
+			char temp[20];
+            char buff[LINELEN];
 
-				fgets(str,LINELEN,stdin);
-				int len_str = strlen(str);
-            int pre = ftell(fp); // will be used if we dont find the string
-            int i=0;
-
-
-            // when we press enter it will automatically add '/0' at the end
-            // string so will compare one less character
-
+			//getting target string from stdin
+            fgets(str,LINELEN,stdin);
+			int len_str = strlen(str);
+            str[strlen(str)-1]='\0';
+            //because this string is appending /n at the end due to pressing of enter 
+            //tab so thats why we need to chnage that /n to /0           
+            
             while(fgets(buff,LINELEN,fp))
             {
-               actual_lines++;
-		         if(strncmp(buff,str,len_str-1)==0)
-               {
-                  //printf("search : %sactual : %s",str,buff)
-                  printf("\033[2A \033[2K \033[1G");
+                actual_lines++;
+		        if(strstr(buff,str))
+                {
+                  printf("\033[2A \033[2K \033[1G...........Skipping .....\n");
                   printf("%s",buff);
-                  num_of_lines=0;
+                  num_of_lines=2;
                   break;
                }
-	         }
-         }
+	        }
+        }
       }
-      else if (rv == 3)
+         else if (rv == 3)
          break; 
    }
 }
